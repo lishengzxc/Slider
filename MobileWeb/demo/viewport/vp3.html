@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+  <meta charset="UTF-8">
+  <title></title>
+  <style>
+    .hairline li {
+      position: relative;
+      margin-bottom: 20px;
+      border: none;
+    }
+
+    .hairline li:after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      border: 1px solid #000;
+      box-sizing: border-box;
+      width: 200%;
+      height: 200%;
+      transform: scale(0.5);
+      transform-origin: left top;
+    }
+  </style>
+</head>
+<body>
+<ul class="hairline">
+  <li>1</li>
+  <li>2</li>
+  <li>3</li>
+  <li>4</li>
+  <li>5</li>
+</ul>
+</body>
+</html>

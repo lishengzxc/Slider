@@ -1,0 +1,470 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+
+  <title>MobileWeb</title>
+
+
+  <link rel="stylesheet" href="../bower_components/reveal.js/css/reveal.css">
+  <link rel="stylesheet" href="../bower_components/reveal.js/css/theme/black.css" id="theme">
+
+  <!-- Code syntax highlighting -->
+  <link rel="stylesheet" href="../bower_components/reveal.js/lib/css/zenburn.css">
+
+  <!-- Printing and PDF exports -->
+  <script>
+    var link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.type = 'text/css';
+    link.href = window.location.search.match(/print-pdf/gi) ? '../bower_components/reveal.js/css/print/pdf.css' : '../bower_components/reveal.js/css/print/paper.css';
+    document.getElementsByTagName('head')[0].appendChild(link);
+  </script>
+
+  <!--[if lt IE 9]>
+  <script src="../bower_components/reveal.js/lib/js/html5shiv.js"></script>
+  <![endif]-->
+  <link rel="stylesheet" href="index.css"/>
+</head>
+
+<body>
+
+<div class="reveal">
+
+  <div class="slides">
+    <section>
+      <h1>深入浅出移动WEB开发</h1>
+    </section>
+    <section>
+      <h2>目录</h2>
+      <ul>
+        <li><code>Viewport</code></li>
+        <li>移动<code>Web</code>布局</li>
+        <li>性能优化</li>
+      </ul>
+    </section>
+
+    <section>
+      <section>
+        <h3>第一部分 - <code>Viewport</code></h3>
+        <ul>
+          <li>像素基础</li>
+          <li><code>Viewport视图</code></li>
+          <li><code>meta</code>标签(Viewport)</li>
+        </ul>
+      </section>
+    </section>
+    <section>
+      <section>
+        <h3>像素基础</h3>
+
+        <p class="fragment">一张 750 * 1334 的图片能否在<code>iPhone6</code>完全撑开铺满？</p>
+      </section>
+      <section>
+        <ul>
+          <li><code>px:</code>CSS pixels 逻辑像素</li>
+          <li><code>dp,pt:</code>device independent pixels 设备无关</li>
+          <li><code>dpr:</code>device pixels ratio 设备像素缩放比</li>
+        </ul>
+        <p class="fragment">计算公式：1px = (dpr)^2 * dp</p>
+      </section>
+      <section>
+        <p>为什么在Chrome的中，我们看到的是375 * 627呢？</p>
+
+        <p class="fragment">因为dpr = 2 <br>(iPhone6 Plus dpr = 3)</p>
+      </section>
+      <section>
+        <img src="img/QQ20150920-1@2x.png" alt=""/>
+
+        <p>
+          平面上： <code>1px = (2)^2 *dp => 640dp * 1136dp</code> <br>
+          维度上： <code>1px = 2 * dp => 375px * 627px</code>
+        </p>
+      </section>
+      <section>
+        <img src="img/161818099408982.jpg" alt=""/>
+        <ul class="ppi">
+          <li><code>PPI:</code>单位英寸内的像素密度</li>
+        </ul>
+        <p>以iPhone6为栗子：<br/>
+          ppi = 根号(1334^2 + 750^2) / 4.7 = 326ppi
+        </p>
+      </section>
+    </section>
+    <section>
+      <section>
+        <h3>Viewport视图</h3>
+        <img src="img/QQ20150920-2@2x.png" alt=""/>
+      </section>
+      <section>
+        <h4>手机浏览器默认为我们做了两件事</h4>
+        <ol>
+          <li>页面渲染在一个980px的viewport(ios)</li>
+          <li>缩放</li>
+        </ol>
+      </section>
+    </section>
+    <section>
+      <section>
+        <h3><code>meta</code>标签(Viewport)</h3>
+        <pre><code data-trim contenteditable>
+          <meta name="viewport" content="name=value, name=value">
+        </code></pre>
+      </section>
+      <section>
+        <img src="img/QQ20150920-3@2x.png" alt=""/>
+      </section>
+      <section>
+        所以【布局viewport】=【设备宽度】=【度量viewport】
+      </section>
+    </section>
+    <section>
+      <section>
+        <p>我们需要为移动web做写特殊样式处理<br><br>
+          <small>(思考下，有的时候，我们是不是要完美还原设计稿)</small>
+        </p>
+        <ul>
+          <li>高清图</li>
+          <li>一像素边框</li>
+          <li>rem & 模拟vw</li>
+          <li>单/多行文本溢出</li>
+        </ul>
+      </section>
+      <section>
+        <h3>高清图</h3>
+        <iframe src="http://pan.baidu.com/disk/home#key=&path=%252F" width="1000" height="500" frameborder="0"
+                marginwidth="0" marginheight="0" scrolling="no"
+                style="border:3px solid #666; margin-bottom:5px; max-width: 100%;" allowfullscreen></iframe>
+      </section>
+      <section>
+        <h3>一像素边框</h3>
+        <ul>
+          <li>0.5px</li>
+          <li>元素scale
+          <pre><code>.scale{
+  position: relative;
+}
+.scale:after{
+  content:"";
+  position: absolute;
+  bottom:0px;
+  left:0px;
+  right:0px;
+  border-bottom:1px solid #ddd;
+  -webkit-transform:scaleY(.5);
+  -webkit-transform-origin:0 0;
+}</code></pre>
+          </li>
+          <li>页面scale</li>
+        </ul>
+      </section>
+      <section>
+        <h3>rem & 模拟vw</h3>
+      </section>
+      <section>
+        <pre><code>html{font-size: 32px;}
+//iphone 6
+@media (min-device-width : 375px) {
+html{font-size: 64px;}
+}
+// iphone6 plus
+@media (min-device-width : 414px) {
+html{font-size: 75px;}
+}</code></pre>
+      </section>
+      <section>
+        <pre><code>rem = document.documentElement.clientWidth * dpr / 10</code></pre>
+      </section>
+      <section>
+        <pre><code>var dpr, rem, scale;
+var docEl = document.documentElement;
+var fontEl = document.createElement('style');
+var metaEl = document.querySelector('meta[name="viewport"]');
+
+dpr = window.devicePixelRatio || 1;
+rem = docEl.clientWidth * 2 / 10;
+scale = 1 / dpr;
+
+
+// 设置viewport，进行缩放，达到高清效果
+metaEl.setAttribute('content', 'width=' + dpr * docEl.clientWidth + ',initial-scale=' + scale + ',maximum-scale=' + scale + ', minimum-scale=' + scale + ',user-scalable=no');
+
+// 设置data-dpr属性，留作的css hack之用
+docEl.setAttribute('data-dpr', dpr);
+
+// 动态写入样式
+docEl.firstElementChild.appendChild(fontEl);
+fontEl.innerHTML = 'html{font-size:' + rem + 'px!important;}';
+
+// 给js调用的，某一dpr下rem和px之间的转换函数
+window.rem2px = function(v) {
+  v = parseFloat(v);
+  return v * rem;
+};
+window.px2rem = function(v) {
+  v = parseFloat(v);
+  return v / rem;
+};
+
+window.dpr = dpr;
+window.rem = rem;</code></pre>
+      </section>
+      <section>
+        <h3>单/多行文本溢出</h3>
+        <pre><code>div {
+  overflow: hidden;
+  white-space: nowrap:
+  text-overflow: ellipsis;
+}</code></pre>
+        <pre><code>div {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+}</code></pre>
+      </section>
+    </section>
+    <section>
+      <section>
+        <h3>第二部分 - 移动Web布局</h3>
+        <br/>
+        <p><code>display: flex</code></p>
+      </section>
+    </section>
+    <section>
+      <section>
+      <h3>弹性</h3>
+      <ul>
+        <li>flex-grow</li>
+        <li>flex-shrink</li>
+        <li>flex-basis</li>
+      </ul>
+      </section>
+      <section>
+        <h3>两个公式</h3>
+        <ul>
+          <li>grow: flex-basis + flow-grow/sum(flow-grow) * remain</li>
+          <li>shrink: flex-basis + flow-shrink/sum(flow-shrink) * remain</li>
+        </ul>
+      </section>
+      <section>
+        <h2>所以，拥抱flex</h2>
+      </section>
+    </section>
+
+    <section>
+      <h3>第二部分 - 性能优化</h3>
+      <ul>
+        <li>页面渲染过程 (timeline)</li>
+        <li>重排 & 重绘</li>
+        <li>高消耗样式列表 </li>
+        <li>硬件加速（translate3d, will-change)</li>
+        <li>读写样式分离</li>
+      </ul>
+    </section>
+    <section>
+      <section>
+        <h3>页面渲染过程</h3>
+        <ol>
+          <li>HTML代码转化成DOM</li>
+          <li>CSS代码转化成CSSOM（CSS Object Model）</li>
+          <li>结合DOM和CSSOM，生成一棵渲染树（包含每个节点的视觉信息）</li>
+          <li>生成布局（layout），即将所有渲染树的所有节点进行平面合成</li>
+          <li>将布局绘制（paint）在屏幕上</li>
+        </ol>
+        <p class="fragment">其中，第4步(flow)和第5步(paint)比较耗时</p>
+      </section>
+      <section>
+        <p>网页生成的时候，至少会渲染一次。用户访问的过程中，还会不断重新渲染。</p>
+        <ul class="fragment">
+          <li>修改DOM</li>
+          <li>修改样式</li>
+          <li>用户事件</li>
+        </ul>
+        <p class="fragment">
+          "重绘"不一定需要"重排"，"重排"必然导致"重绘"，硬件加速，跳过这两个阶段。
+        </p>
+      </section>
+      <section>
+        <img src="img/devtools-waterfall.jpg" alt=""/>
+      </section>
+      <section>
+        <h4>常见重排属性</h4>
+        <hr/>
+        <div>
+          <table>
+            <tbody><tr><td>width</td><td>height</td><td>padding</td><td>margin</td></tr>
+            <tr><td>display</td><td>border-width</td><td>border</td><td>top</td></tr>
+            <tr><td>position</td><td>font-size</td><td>float</td><td>text-align</td></tr>
+            <tr><td>overflow-y</td><td>font-weight</td><td>overflow</td><td>left</td></tr>
+            <tr><td>font-family</td><td>line-height</td><td>vertical-align</td><td>right</td></tr>
+            <tr><td>clear</td><td>white-space</td><td>bottom</td><td>min-height</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <section>
+        <h4>常见重绘属性</h4>
+        <hr/>
+        <div>
+          <table>
+            <tbody><tr><td>color</td><td>border-style</td><td>visibility</td><td>background</td></tr>
+            <tr><td>text-decoration</td><td>background-image</td><td>background-position</td><td>background-repeat</td></tr>
+            <tr><td>outline-color</td><td>outline</td><td>outline-style</td><td>border-radius</td></tr>
+            <tr><td>outline-width</td><td>box-shadow</td><td>background-size</td><td></td></tr>
+            </tbody></table>
+        </div>
+      </section>
+      <section>
+        <h4>常见高消耗样式</h4>
+        <p>background-attachment/border-radius/box-shadow/text-shadow/gradient</p>
+      </section>
+      <section>
+        <h3>硬件加速</h3>
+        <p>硬件加速依赖于浏览器渲染页面使用的layering model，当特定的操作（CSS 3D变形）作用于页面上的一个元素，元素移动到它自己的layer，在这个layer中元素合一不受页面其他元素的干扰独立渲染，然后复合到页面中去。在这种隔离内容渲染的工作方式下，如果页面的变化仅仅是该元素的变形，其余部分不必被重新渲染，这会带来显著的速度优势。值得注意的是只有3D变形会有自己的layer，2D变形不会。</p>
+      </section>
+      <section>
+        <ul>
+          <li>translate3d()</li>
+          <li>will-change</li>
+        </ul>
+      </section>
+      <section>
+        <h4>will-change使用时候的注意</h4>
+        <ul>
+          <li>不要声明太多属性或为太多元素声明</li>
+          <li>给浏览器足够的时间工作</li>
+          <li>变化完成后移除will-change</li>
+        </ul>
+      </section>
+      <section>
+        <h3>避免无意识的创建layer</h3>
+      </section>
+      <section>
+        <ul><li>3D 或透视变换(perspective transform) CSS 属性</li>
+          <li>使用加速视频解码的  元素</li>
+          <li>拥有 3D (WebGL) 上下文或加速的 2D 上下文的  元素</li>
+          <li>混合插件(如 Flash)</li>
+          <li>对自己的 opacity 做 CSS 动画或使用一个动画 webkit 变换的元素</li>
+          <li>拥有加速 CSS 过滤器的元素</li>
+          <li>元素有一个包含复合层的后代节点(换句话说，就是一个元素拥有一个子元素，该子元素在自己的层里)</li>
+          <li>元素有一个 z-index 较低且包含一个复合层的兄弟元素(换句话说就是该元素在复合层上面渲染)</li>
+        </ul>
+      </section>
+      <section>
+        <p>所以，使用3D硬件加速提升动画性能时，最好给元素增加一个z-index属性，人为干扰复合层的排序，可以有效减少chrome创建不必要的复合层，提升渲染性能，移动端优化效果尤为明显。</p>
+      </section>
+      <section>
+        <h3>读写样式分离</h3>
+      </section>
+      <section>
+        <pre><code>var h1 = element1.clientHeight;
+element1.style.height = (h1 * 2) + 'px';
+
+var h2 = element2.clientHeight;
+element2.style.height = (h2 * 2) + 'px';
+
+var h3 = element3.clientHeight;
+element3.style.height = (h3 * 2) + 'px';</code></pre>
+      </section>
+      <section>
+        <pre><code>
+          // Read
+          var h1 = element1.clientHeight;
+          var h2 = element2.clientHeight;
+          var h3 = element3.clientHeight;
+
+          // Write
+          element1.style.height = (h1 * 2) + 'px';
+          element2.style.height = (h2 * 2) + 'px';
+          element3.style.height = (h3 * 2) + 'px';
+        </code></pre>
+      </section>
+      <section>
+        <pre><code>document.body.addEventListener('click', function() {
+  var h1 = element1.clientHeight;
+  element1.style.height = (h1 * 2) + 'px';
+});
+
+document.body.addEventListener('click', function() {
+  var h2 = element2.clientHeight;
+  element2.style.height = (h2 * 2) + 'px';
+});</code></pre>
+      </section>
+      <section>
+        <p>使用requestAnimationRequest推迟执行</p>
+        <pre><code>document.body.addEventListener('click', function() {
+    // Read
+    var h1 = element1.clientHeight;
+    // Write
+    requestAnimationFrame(function() {
+      element1.style.height = (h1 * 2) + 'px';
+    });
+  });
+document.body.addEventListener('click', function() {
+  // Read
+  var h2 = element2.clientHeight;
+  // Write
+  requestAnimationFrame(function() {
+    element2.style.height = (h2 * 2) + 'px';
+    });
+  });</code></pre>
+      </section>
+      <section>
+
+      </section>
+    </section>
+  </div>
+
+</div>
+
+<script src="../bower_components/reveal.js/lib/js/head.min.js"></script>
+<script src="../bower_components/reveal.js/js/reveal.js"></script>
+
+<script>
+
+  // Full list of configuration options available at:
+  // https://github.com/hakimel/reveal.js#configuration
+  Reveal.initialize({
+    controls: true,
+    progress: true,
+    history: true,
+    center: true,
+
+    transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+    // Optional reveal.js plugins
+    dependencies: [
+      {
+        src: '../bower_components/reveal.js/lib/js/classList.js', condition: function () {
+        return !document.body.classList;
+      }
+      },
+      {
+        src: '../bower_components/reveal.js/plugin/markdown/marked.js', condition: function () {
+        return !!document.querySelector('[data-markdown]');
+      }
+      },
+      {
+        src: '../bower_components/reveal.js/plugin/markdown/markdown.js', condition: function () {
+        return !!document.querySelector('[data-markdown]');
+      }
+      },
+      {
+        src: '../bower_components/reveal.js/plugin/highlight/highlight.js', async: true, condition: function () {
+        return !!document.querySelector('pre code');
+      }, callback: function () {
+        hljs.initHighlightingOnLoad();
+      }
+      },
+      {src: '../bower_components/reveal.js/plugin/zoom-js/zoom.js', async: true},
+      {src: '../bower_components/reveal.js/plugin/notes/notes.js', async: true}
+    ]
+  });
+
+</script>
+
+</body>
+</html>
