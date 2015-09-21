@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <style>
+    .par-timing-box {
+      height: 20px;
+      background: red;
+      margin-bottom: 2px;
+    }
+  </style>
+</head>
+<body>
+<div id="parGroupContainer">
+  <div id="parItem1" class="par-timing-box" style="width: 600px;"></div>
+  <div id="parItem2" class="par-timing-box" style="width: 820px;"></div>
+  <div id="parItem3" class="par-timing-box" style="width: 200px;"></div>
+</div>
+<script src="web-animations.js"></script>
+<script>
+  document.timeline.play(new ParGroup([
+    new Animation(document.getElementById('parItem1'), [{width: '0px'}, {width: '600px'}], 1),
+    new Animation(document.getElementById('parItem2'), [{width: '0px'}, {width: '800px'}], 1),
+    new Animation(document.getElementById('parItem3'), [{width: '0px'}, {width: '200px'}], 1),
+  ]));
+</script>
+</body>
+</html>

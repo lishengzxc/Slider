@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <style>
+    .seq-timing-box {
+      height: 20px;
+      background: red;
+      margin-bottom: 2px;
+    }
+  </style>
+</head>
+<body>
+<div id="seqGroupContainer">
+  <div id="seqItem1" class="seq-timing-box" style="width: 0px;"></div>
+  <div id="seqItem2" class="seq-timing-box" style="width: 0px; margin-left: 300px"></div>
+  <div id="seqItem3" class="seq-timing-box" style="width: 0px; margin-left: 700px"></div>
+</div>
+<script src="web-animations.js"></script>
+<script>
+  document.timeline.play(new SeqGroup([
+    new Animation(document.getElementById('seqItem1'), [{width: '0px'}, {width: '300px'}], 1),
+    new Animation(document.getElementById('seqItem2'), [{width: '0px'}, {width: '400px'}], 1),
+    new Animation(document.getElementById('seqItem3'), [{width: '0px'}, {width: '100px'}], 1),
+  ]));
+</script>
+</body>
+</html>
