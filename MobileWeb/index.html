@@ -66,8 +66,9 @@
         <ul>
           <li><code>px:</code>CSS pixels 逻辑像素</li>
           <li><code>dp,pt:</code>device independent pixels 设备无关</li>
-          <li><code>dpr:</code>device pixels ratio 设备像素缩放比</li>
+          <li><code>dpr:</code>device pixel ratio 设备像素缩放比</li>
         </ul>
+        <p class="fragment">window.devicePixelRatio</p>
         <p class="fragment">计算公式：1px = (dpr)^2 * dp</p>
       </section>
       <section>
@@ -85,9 +86,7 @@
       </section>
       <section>
         <img src="img/161818099408982.jpg" alt=""/>
-        <ul class="ppi">
-          <li><code>PPI:</code>单位英寸内的像素密度</li>
-        </ul>
+          <p><code>PPI:</code>单位英寸内的像素密度</p>
         <p>以iPhone6为栗子：<br/>
           ppi = 根号(1334^2 + 750^2) / 4.7 = 326ppi
         </p>
@@ -95,7 +94,7 @@
     </section>
     <section>
       <section>
-        <h3>Viewport视图</h3>
+        <h3>Viewport</h3>
         <img src="img/QQ20150920-2@2x.png" alt=""/>
       </section>
       <section>
@@ -119,6 +118,19 @@
       <section>
         所以【布局viewport】=【设备宽度】=【度量viewport】
       </section>
+      <section>
+        <p>minimal-ui</p>
+        <img width="30%" style="display: inline-block" src="img/1beba0f12aea8f359c567ddc9a18dcc8.jpg" alt=""/>
+        <img width="30%" style="display: inline-block" src="img/1d2347bf05d29afc6b4d7ef4b5d3ad7f.jpg" alt=""/>
+        <p>The minimal-ui viewport property is no longer supported in iOS 8.</p>
+      </section>
+      <section>
+        <pre><code>
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+        </code></pre>
+      </section>
     </section>
     <section>
       <section>
@@ -134,9 +146,13 @@
       </section>
       <section>
         <h3>高清图</h3>
-        <iframe src="http://pan.baidu.com/disk/home#key=&path=%252F" width="1000" height="500" frameborder="0"
-                marginwidth="0" marginheight="0" scrolling="no"
-                style="border:3px solid #666; margin-bottom:5px; max-width: 100%;" allowfullscreen></iframe>
+        <img width="70%" src="img/QQ20150922-2@2x.png" alt=""/>
+      </section>
+      <section>
+        <ul>
+          <li>图片服务器</li>
+          <li>定死尺寸</li>
+        </ul>
       </section>
       <section>
         <h3>一像素边框</h3>
@@ -162,17 +178,22 @@
       </section>
       <section>
         <h3>rem & 模拟vw</h3>
+        <ul>
+          <li>rem：相对长度单位。相对于根元素(即html元素)font-size计算值的倍数</li>
+          <li>vw: 相对于视口的宽度。视口被均分为100单位的vw</li>
+        </ul>
       </section>
       <section>
-        <pre><code>html{font-size: 32px;}
+        <pre><code>html {font-size: 32px;}
 //iphone 6
 @media (min-device-width : 375px) {
-html{font-size: 64px;}
+  html{font-size: 64px;}
 }
 // iphone6 plus
 @media (min-device-width : 414px) {
-html{font-size: 75px;}
+  html{font-size: 75px;}
 }</code></pre>
+        <p class="fragment">但是考虑到Android，怎么办？</p>
       </section>
       <section>
         <pre><code>rem = document.documentElement.clientWidth * dpr / 10</code></pre>
@@ -189,7 +210,11 @@ scale = 1 / dpr;
 
 
 // 设置viewport，进行缩放，达到高清效果
-metaEl.setAttribute('content', 'width=' + dpr * docEl.clientWidth + ',initial-scale=' + scale + ',maximum-scale=' + scale + ', minimum-scale=' + scale + ',user-scalable=no');
+metaEl.setAttribute('content',
+          'width=' + dpr * docEl.clientWidth
+          + ',initial-scale=' + scale + ',maximum-scale='
+          + scale + ', minimum-scale='
+          + scale + ',user-scalable=no');
 
 // 设置data-dpr属性，留作的css hack之用
 docEl.setAttribute('data-dpr', dpr);
@@ -263,7 +288,6 @@ window.rem = rem;</code></pre>
         <li>高消耗样式列表 </li>
         <li>硬件加速（translate3d, will-change)</li>
         <li>读写样式分离</li>
-        <li>Webanimations</li>
       </ul>
     </section>
     <section>
@@ -279,14 +303,20 @@ window.rem = rem;</code></pre>
         <p class="fragment">其中，第4步(flow)和第5步(paint)比较耗时</p>
       </section>
       <section>
+        <img style="width: 40%" src="img/QQ20150922-1.png" alt=""/>
+        <img class="fragment" style="width: 40%" src="img/QQ20150922-2.png" alt=""/>
+        <img class="fragment" style="width: 40%" src="img/QQ20150922-3.png" alt=""/>
+        <img class="fragment" style="width: 40%" src="img/QQ20150922-4.png" alt=""/>
+      </section>
+      <section>
         <p>网页生成的时候，至少会渲染一次。用户访问的过程中，还会不断重新渲染。</p>
         <ul class="fragment">
           <li>修改DOM</li>
           <li>修改样式</li>
-          <li>用户事件</li>
+          <li>用户事件(页面滚动、输入框键入文字、改变窗口大小)</li>
         </ul>
         <p class="fragment">
-          "重绘"不一定需要"重排"，"重排"必然导致"重绘"，硬件加速，跳过这两个阶段。
+          "重绘(repaint)"不一定需要"重排(reflow)"，"重排"必然导致"重绘"，硬件加速(Composite)，跳过这两个阶段。
         </p>
       </section>
       <section>
@@ -350,7 +380,7 @@ window.rem = rem;</code></pre>
           <li>使用加速视频解码的  元素</li>
           <li>拥有 3D (WebGL) 上下文或加速的 2D 上下文的  元素</li>
           <li>混合插件(如 Flash)</li>
-          <li>对自己的 opacity 做 CSS 动画或使用一个动画 webkit 变换的元素</li>
+          <li>对自己的 opacity 做CSS animation或使用一个transition的元素</li>
           <li>拥有加速 CSS 过滤器的元素</li>
           <li>元素有一个包含复合层的后代节点(换句话说，就是一个元素拥有一个子元素，该子元素在自己的层里)</li>
           <li>元素有一个 z-index 较低且包含一个复合层的兄弟元素(换句话说就是该元素在复合层上面渲染)</li>
@@ -361,9 +391,12 @@ window.rem = rem;</code></pre>
       </section>
       <section>
         <h3>读写样式分离</h3>
+        <p>前面提到，DOM变动和样式变动，都会触发重新渲染。但是，浏览器已经很智能了，会尽量把所有的变动集中在一起，排成一个队列，然后一次性执行，尽量避免多次重新渲染。</p>
       </section>
       <section>
-        <pre><code>var h1 = element1.clientHeight;
+        <p>浏览器已经很智能了，会尽量把所有的变动集中在一起，排成一个队列，然后一次性执行，尽量避免多次重新渲染。</p>
+        <p>但是这样的话~</p>
+        <pre class="fragment"><code>var h1 = element1.clientHeight;
 element1.style.height = (h1 * 2) + 'px';
 
 var h2 = element2.clientHeight;
@@ -448,6 +481,7 @@ document.body.addEventListener('click', function() {
         <ul>
           <li>body滚动</li>
           <li>局部滚动 -webkit-overflow-scrolling: touch;</li>
+          <li>iScroll</li>
         </ul>
       </section>
       <section>
@@ -457,27 +491,10 @@ document.body.addEventListener('click', function() {
         </ul>
       </section>
       <section>
-        <pre><code>var latestKnownScrollY = 0,
-  ticking = false;
-
-  function onScroll() {
-    latestKnownScrollY = window.scrollY;
-    requestTick();
-  }
-
-  function requestTick() {
-    if(!ticking) {
-      requestAnimationFrame(update);
-    }
-    ticking = true;
-  }
-  function update() {
-    ticking = false;
-
-    var currentScrollY = latestKnownScrollY;
-
-    // 更改样式
-  }
+        <pre><code>
+$(window).on('scroll', function() {
+  window.requestAnimationFrame(scrollHandler);
+});
         </code></pre>
       </section>
     </section>
