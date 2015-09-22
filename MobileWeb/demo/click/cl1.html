@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+  <meta charset="UTF-8">
+  <title></title>
+  <meta name="viewport" content="initial-scale=1, user-scalable=no">
+  <style>
+    div {
+      width: 200px;
+      height: 100px;
+      background: red;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+<div id="click">click</div>
+<div id="touch">touch</div>
+
+<script>
+  var start1;
+  var start2;
+  document.getElementById('click').addEventListener('touchstart', function () {
+    start1 = new Date();
+  });
+
+  document.getElementById('touch').addEventListener('touchstart', function () {
+    start2 = new Date();
+  });
+
+
+  document.getElementById('click').addEventListener('click', function () {
+    alert(new Date() - start1);
+  });
+
+  document.getElementById('touch').addEventListener('touchend', function () {
+    alert(new Date() - start2);
+  });
+</script>
+</body>
+</html>

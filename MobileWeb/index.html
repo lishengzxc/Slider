@@ -42,6 +42,7 @@
         <li><code>Viewport</code></li>
         <li>移动<code>Web</code>布局</li>
         <li>性能优化</li>
+        <li>交互相关</li>
       </ul>
     </section>
 
@@ -183,7 +184,7 @@ var fontEl = document.createElement('style');
 var metaEl = document.querySelector('meta[name="viewport"]');
 
 dpr = window.devicePixelRatio || 1;
-rem = docEl.clientWidth * 2 / 10;
+rem = docEl.clientWidth * dpr / 10;
 scale = 1 / dpr;
 
 
@@ -255,13 +256,15 @@ window.rem = rem;</code></pre>
     </section>
 
     <section>
-      <h3>第二部分 - 性能优化</h3>
+      <h3>第三部分 - 性能优化</h3>
       <ul>
         <li>页面渲染过程 (timeline)</li>
         <li>重排 & 重绘</li>
         <li>高消耗样式列表 </li>
         <li>硬件加速（translate3d, will-change)</li>
         <li>读写样式分离</li>
+        <li>Webanimations</li>
+        <li></li>
       </ul>
     </section>
     <section>
@@ -341,6 +344,7 @@ window.rem = rem;</code></pre>
       </section>
       <section>
         <h3>避免无意识的创建layer</h3>
+        <p>硬件加速的坑</p>
       </section>
       <section>
         <ul><li>3D 或透视变换(perspective transform) CSS 属性</li>
@@ -413,8 +417,54 @@ document.body.addEventListener('click', function() {
   });</code></pre>
       </section>
       <section>
-
+        <h3>WebAnimations</h3>
+        <p>
+          Web动画API（Web Animations API）提供了CSS、SVG动画的单一接口。它具有更好的性能、更强的时间控制、动画回放和灵活统一的JavaScript编程接口
+        </p>
       </section>
+    </section>
+    <section>
+      <section>
+        <h3>第四部分 - 交互相关</h3>
+        <ul>
+          <li>click-tap-点击延时</li>
+          <li>touch-action</li>
+          <li>避免在输入事件中修改样式</li>
+        </ul>
+      </section>
+      <section>
+        <h4>touch-action</h4>
+        <ul>
+          <li>touch-action: auto | none | pan-x | pan-y | manipulation | double-tap-zoom</li>
+        </ul>
+      </section>
+      <section>
+        <pre><code>var latestKnownScrollY = 0,
+  ticking = false;
+
+  function onScroll() {
+    latestKnownScrollY = window.scrollY;
+    requestTick();
+  }
+
+  function requestTick() {
+    if(!ticking) {
+      requestAnimationFrame(update);
+    }
+    ticking = true;
+  }
+  function update() {
+    ticking = false;
+
+    var currentScrollY = latestKnownScrollY;
+
+    // 更改样式
+  }
+        </code></pre>
+      </section>
+    </section>
+    <section>
+      <h2>Thank You!</h2>
     </section>
   </div>
 
