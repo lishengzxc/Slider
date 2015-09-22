@@ -258,13 +258,12 @@ window.rem = rem;</code></pre>
     <section>
       <h3>第三部分 - 性能优化</h3>
       <ul>
-        <li>页面渲染过程 (timeline)</li>
+        <li>页面渲染过程</li>
         <li>重排 & 重绘</li>
         <li>高消耗样式列表 </li>
         <li>硬件加速（translate3d, will-change)</li>
         <li>读写样式分离</li>
         <li>Webanimations</li>
-        <li></li>
       </ul>
     </section>
     <section>
@@ -428,8 +427,27 @@ document.body.addEventListener('click', function() {
         <h3>第四部分 - 交互相关</h3>
         <ul>
           <li>click-tap-点击延时</li>
+          <li>滚动  -webkit-overflow-scrolling: touch;</li>
           <li>touch-action</li>
           <li>避免在输入事件中修改样式</li>
+        </ul>
+      </section>
+      <section>
+        <h4>穿透的解决方案</h4>
+        <ul>
+          <li>"上下"都用tap（如果下层是a标签）</li>
+          <li>e.preventDefault阻止真实click</li>
+          <li>FastClick</li>
+        </ul>
+      </section>
+      <section>
+        <img src="img/ng-click.png" alt=""/>
+      </section>
+      <section>
+        <h4>滚动</h4>
+        <ul>
+          <li>body滚动</li>
+          <li>局部滚动 -webkit-overflow-scrolling: touch;</li>
         </ul>
       </section>
       <section>
