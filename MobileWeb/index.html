@@ -164,7 +164,7 @@
         <h3>一像素边框</h3>
         <ul>
           <li>0.5px</li>
-          <li>元素scale
+          <li>元素scale or 页面scale
           <pre><code>.scale{
   position: relative;
 }
@@ -179,7 +179,7 @@
   -webkit-transform-origin:0 0;
 }</code></pre>
           </li>
-          <li>页面scale</li>
+          <li>border-image</li>
         </ul>
       </section>
       <section>
@@ -474,8 +474,8 @@ document.body.addEventListener('click', function() {
       <section>
         <h4>穿透的解决方案</h4>
         <ul>
-          <li>"上下"都用tap（如果下层是a标签）</li>
           <li>e.preventDefault阻止真实click</li>
+          <li>css3 pointer-events</li>
           <li>FastClick</li>
         </ul>
       </section>
