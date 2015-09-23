@@ -66,8 +66,8 @@
       </section>
       <section>
         <ul>
-          <li><code>px:</code>CSS pixels 逻辑像素</li>
-          <li><code>dp,pt:</code>device independent pixels 设备无关</li>
+          <li><code>px:</code>CSS pixel 逻辑像素</li>
+          <li><code>dp,pt:</code>device independent pixel 设备无关</li>
           <li><code>dpr:</code>device pixel ratio 设备像素缩放比</li>
         </ul>
         <p class="fragment">window.devicePixelRatio</p>
@@ -92,6 +92,9 @@
         <p>以iPhone6为栗子：<br/>
           ppi = 根号(1334^2 + 750^2) / 4.7 = 326ppi
         </p>
+      </section>
+      <section>
+        <img src="img/QQ20150923-1.png" alt=""/>
       </section>
     </section>
     <section>
@@ -370,6 +373,19 @@ window.rem = rem;</code></pre>
         </ul>
       </section>
       <section>
+        <pre><code>will-change: auto;
+will-change: scroll-position;
+will-change: contents;
+will-change: transform;
+will-change: opacity;
+will-change: left, top;</code></pre>
+        <ul class="fragment">
+          <li>auto 表示没有明确的意图; 无论是启发式和最优化，用户代理应该应用都和正常情况相同</li>
+          <li>scroll-position 表示开发者期望去在接下来去改变或者有动画应用元素的滚动位置</li>
+          <li>contents 表示开发者期望去在接下来去改变或者有动画应用元素的内容</li>
+        </ul>
+      </section>
+      <section>
         <h4>will-change使用时候的注意</h4>
         <ul>
           <li>不要声明太多属性或为太多元素声明</li>
@@ -453,6 +469,9 @@ document.body.addEventListener('click', function() {
     element2.style.height = (h2 * 2) + 'px';
     });
   });</code></pre>
+      </section>
+      <section>
+        <h4>思考下再写~</h4>
       </section>
       <section>
         <h3>WebAnimations</h3>

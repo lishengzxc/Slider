@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+  <meta charset="UTF-8">
+  <title></title>
+  <style>
+    .layer {
+      width: 200px;
+      height: 200px;
+      background-color: red;
+      opacity: 1;
+      transition: opacity 1000ms linear;
+    }
+    .hide {
+      opacity: 0;
+    }
+  </style>
+</head>
+<body>
+<div class="layer" id="layer1"></div>
+<script>
+  var layer = document.getElementById('layer1');
+  var toggle = function () {
+    if (layer.classList.contains('hide')) {
+      layer.classList.remove('hide');
+    } else {
+      layer.classList.add('hide');
+    }
+  };
+  layer.addEventListener('click', toggle);
+</script>
+</body>
+</html>
